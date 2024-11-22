@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Student List</title>
+  </head>
+  <body>
+    {% block title %}
+    <h1>List of Students</h1>
+    {% endblock title %}
+
+    <a href="{% url 'student_create' %}">Create New Student</a>
+
+    {% block studentDetail %}
+    <ul>
+        {% comment %} {{students.0.name}} {% endcomment %}
+      {% if students|length > 1 %} {% for student in students %}
+      <li>
+        <a href="{% url 'student_detail' student.pk %}">{{ student.name }}</a>
+        | <a href="{% url 'student_update' student.pk %}">Edit</a>
+        <button onclick="confirmDelete( '{{student.id}}' , '{{student.name}}')">
+          Delete
+        </button>
+
+        {{student.name | upper }}
+        <ul>
+          <li>{{student.subject}}</li>
+          <li>{{student.roll_no}}</li>
+          <li>{{student.session}}</li>
+        </ul>
+      </li>
+      {% endfor %}
+      {% else  %} should be more students
+       {% endif %}
+    </ul>
+    {% endblock studentDetail %} {% block footer %}
+    <p>Student management</p>
+    {% endblock footer %}
+  </body>
+  <script>
+    function confirmDelete(id, name) {
+      const result = confirm(`Are you sure to delete ${name}`);
+      if (result) {
+        console.log(result);
+        fetch(`/api/student/${id}/delete/`, {
+          method: "DELETE",
+          headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+        }).then((res) => {
+          if (res.ok) {
+            location.reload();
+          }
+        });
+      }
+    }
+  </script>
+</html>

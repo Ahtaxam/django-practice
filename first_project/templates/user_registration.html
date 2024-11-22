@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Student Form</title>
+  </head>
+  <style>
+    .errorlist{
+        color:red;
+        list-style-type:none;
+        margin:0;
+        padding:0;
+        font-size:12px;
+    }
+    </style>
+  <body>
+    <h1>User Registration Form</h1>
+    <form method="POST" novalidate>
+        {% csrf_token %}
+      {{ form.as_p }} 
+      {% comment %} {{form.name}}{% endcomment %} 
+      {% comment %} {{form.name.html_name}} {% endcomment %}
+       {% comment %} {{ form.non_field_errors }}
+      {% for field in form   %}
+      <div>
+      {{field.label_tag}} {{field}} {{field.errors}}
+      </div>
+      {% endfor %} {% endcomment %}
+
+
+
+      
+      {% comment %} {% for field in form.visible_fields %}
+      <div>
+          {{ field.label_tag }} {{ field }}
+      </div>
+  {% endfor %}
+  
+  <p>Hidden Fields:</p>
+  {% for hidden in form.hidden_fields %}
+      {{ hidden }}
+  {% endfor %} {% endcomment %}
+  
+      <button type="submit">Save</button>
+    </form>
+  </body>
+</html>
